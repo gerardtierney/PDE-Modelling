@@ -1,8 +1,11 @@
-from pde_modelling import heat, wave, laplace
+import sys
+from pde_modelling import heat, wave, laplace, gui
 
 
-# main menu, pick which PDE to solve and graph
-# run with: python -m pde_modelling   (or just run main.py)
+# starts the window by default
+# run with: python -m pde_modelling              (window)
+#           python -m pde_modelling --terminal   (the old typing version)
+# or just run main.py
 
 
 def showInfo():
@@ -18,11 +21,9 @@ def showInfo():
     print()
 
 
-def main():
+def terminalMenu():
     mode = ""
 
-    # mode is kept as text now. before it was int(input()) which crashed if you typed 'menu',
-    # and the while mode == 1 loops never ended so it couldn't get back to the menu
     while mode != "q":
         print()
 
@@ -35,21 +36,28 @@ def main():
 
         print()
 
-        if mode == "menu":
-            showInfo()
         try:
-            if mode == "1":
+            if mode == "menu":
+                showInfo()
+            elif mode == "1":
                 heat.run()
             elif mode == "2":
                 wave.run()
             elif mode == "3":
                 laplace.run()
-            elif mode != "q" and mode != "menu":
+            elif mode != "q":
                 print("  Not an option, try again")
         except (KeyboardInterrupt, EOFError):
             # Ctrl+C halfway through one of them goes back to the menu instead of crashing
             print()
             print("  Cancelled, back to the menu")
+
+
+def main():
+    if "--terminal" in sys.argv:
+        terminalMenu()
+    else:
+        gui.main()
 
 
 if __name__ == "__main__":
